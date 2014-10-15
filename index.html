@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Gaems Ipsum</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+</head>
+<body>
+<!-- Page Content -->
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1>Gaemz Ipsum</h1>
+            <p class="lead" id="lead"></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="form-inline" role="form">
+                <div class="form-group">
+                    Indie to AAA Ratio<br>
+                    <input id="indie-to-aaa" class="form-control" type="range" min="0" max="100" step="10" value="20" />
+                    <span id="itoavalue">20</span>%
+                </div>
+            </div>
+            <div class="form-inline" role="form" style="margin-top: 25px;">
+                <div class="form-group">
+                    <input class="form-control" type="text" style="width: 50px;" id="sentenceamount" value="7"> words in a sentence
+                    <button type="submit" class="btn btn-primary" id="createSentence">Create</button>
+                </div>
+            </div>
+            <div class="form-inline" role="form" style="margin-top: 25px;">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" id="createRandomSentence">Random Sentence</button>
+                </div>
+            </div>
+            <div class="form-inline" role="form" style="margin-top: 25px;">
+                <div class="form-group">
+                    <input class="form-control" type="text" placeholder="" value="4" id="paragraphsamount">
+                    <button type="submit" class="btn btn-info" id="createParagraphs">Paragraphs</button>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-8" style="margin-top: 25px;">
+            <textarea id="indieIpsumText" class="form-control" rows="15"></textarea>
+        </div>
+    </div>
+</div>
+<!-- /.container -->
+<script src="javascript/indieIpsum.js"></script>
+<script>
+    (function() {
+
+        var indieSlider = document.getElementById('indie-to-aaa'),
+            resultTextArea = document.getElementById('indieIpsumText'),
+            indieToAAAValue = document.getElementById('itoavalue'),
+            sentenceButton = document.getElementById('createSentence'),
+            paragraphsButton = document.getElementById('createParagraphs'),
+            randomSentenceButton = document.getElementById('createRandomSentence'),
+            gaemzIpsum = new GaemzIpsum(0.5, 0.5);
+
+        indieSlider.addEventListener('change', function(){
+            var value = indieSlider.value;
+            indieToAAAValue.innerHTML = value;
+        });
+
+
+        sentenceButton.addEventListener('click', function() {
+            var numSentences = document.getElementById('sentenceamount').value,
+                indieRatio = indieSlider.value / 100,
+                sentence = gaemzIpsum.createSentence(numSentences, indieRatio);
+
+            resultTextArea.value = sentence;
+        });
+
+        paragraphsButton.addEventListener('click', function() {
+            var numParagraphs = document.getElementById('paragraphsamount').value,
+                indieRatio = indieSlider.value / 100,
+                paragraphs = gaemzIpsum.createParagraph(numParagraphs, indieRatio);
+
+            resultTextArea.value = paragraphs.join('\n\n');
+
+        });
+
+        randomSentenceButton.addEventListener('click', function() {
+            var sentenceLength = getRandomInt(5, 10),
+                indieRatio = indieSlider.value / 100,
+                sentence = gaemzIpsum.createSentence(sentenceLength, indieRatio);
+
+            resultTextArea.value = sentence;
+        });
+
+        var leadSentence = gaemzIpsum.createSentence(7, 0.5);
+        document.getElementById('lead').innerHTML = leadSentence;
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+    })();
+</script>
+</body>
+</html>
